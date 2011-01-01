@@ -10,6 +10,8 @@ from tempfile import mkstemp
 import shutil
 
 from headshrinker.lib.base import BaseController, render
+from headshrinker.cel import celeryconfig
+from headshrinker.cel.tasks import GenerateThumbnail
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +33,11 @@ class ThumbnailController(BaseController):
             new_file = mkstemp(suffix='.jpg', dir=image_dir)
             shutil.copyfileobj(image.file, open(new_file[1], 'w'))
 
-            thumb = self._shrinkme(new_file[1])
+            result = GenerateThumbnail.delay(new_file[1])
+
+            # .get waits for the task to complete and then gets the result
+            thumb = result.get()
+
         else:
             abort(500)
 
@@ -39,16 +45,6 @@ class ThumbnailController(BaseController):
         c.thumbnail = os.path.basename(thumb)
 
         return render('/saved.mako')
-
-    def _shrinkme(self, image_file):
-        """Turn this image into a 128x128 pixel size of itself"""
-        size = 128, 128
-
-        file, ext = os.path.splitext(image_file)
-        im = Image.open(image_file)
-        im.thumbnail(size, Image.ANTIALIAS)
-        im.save(file + ".thumbnail", "JPEG")
-        return file + ".thumbnail"
 
     def viewfile(self, id):
         """Return the rendered image file"""
