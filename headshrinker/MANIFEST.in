@@ -1,0 +1,3 @@
+include headshrinker/config/deployment.ini_tmpl
+recursive-include headshrinker/public *
+recursive-include headshrinker/templates *
