@@ -37,4 +37,8 @@ def generate_thumbnail(filename):
     # can do the same stuff here, just looks different
     pass
 
-
+class RunStats(Task):
+    def run(self, **kwargs):
+        """Just pretend to generate some stats"""
+        logger = self.get_logger(**kwargs)
+        logger.info('Running Stats...will run again ...')

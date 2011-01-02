@@ -16,3 +16,14 @@ CELERY_SEND_TASK_ERROR_EMAILS = True
 ADMINS = [('Rick', 'rharding@morpace.com'),]
 SERVER_EMAIL = 'celery@morpace.com'
 MAIL_HOST = 'morpace.com'
+
+
+# scheduled items
+from datetime import timedelta
+
+CELERYBEAT_SCHEDULE = {
+    "runs-every-10-seconds": {
+        "task": "headshrinker.cel.tasks.RunStats",
+        "schedule": timedelta(seconds=10),
+    },
+}
