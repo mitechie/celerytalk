@@ -16,6 +16,7 @@ log = logging.getLogger(__name__)
 class ThumbnailController(BaseController):
 
     def index(self):
+        """Just head on over to the upload action"""
         redirect(url(controller="thumbnail", action="upload"))
 
     def upload(self):
