@@ -33,7 +33,7 @@ class GenerateThumbnail(Task):
 from celery.decorators import task
 
 @task
-def generate_thumbnail(filename):
+def generate_thumbnail(filename, **kwargs):
     # can do the same stuff here, just looks different
     pass
 
